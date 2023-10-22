@@ -1,0 +1,149 @@
+version: "3.1"
+nlu:
+
+- intent: greet
+  examples: |
+    - hey
+    - hello
+    - hi
+    - hello there
+    - good morning
+    - good evening
+    - moin
+    - hey there
+    - let's go
+    - hey dude
+    - goodmorning
+    - goodevening
+    - good afternoon
+
+- intent: goodbye
+  examples: |
+    - cu
+    - good by
+    - cee you later
+    - good night
+    - bye
+    - goodbye
+    - have a nice day
+    - see you around
+    - bye bye
+    - see you later
+
+- intent: affirm
+  examples: |
+    - yes
+    - y
+    - indeed
+    - of course
+    - that sounds good
+    - correct
+
+- intent: deny
+  examples: |
+    - no
+    - n
+    - never
+    - I don't think so
+    - don't like that
+    - no way
+    - not really
+
+- intent: mood_great
+  examples: |
+    - perfect
+    - great
+    - amazing
+    - feeling like a king
+    - wonderful
+    - I am feeling very good
+    - I am great
+    - I am amazing
+    - I am going to save the world
+    - super stoked
+    - extremely good
+    - so so perfect
+    - so good
+    - so perfect
+
+- intent: mood_unhappy
+  examples: |
+    - my day was horrible
+    - I am sad
+    - I don't feel very well
+    - I am disappointed
+    - super sad
+    - I'm so sad
+    - sad
+    - very sad
+    - unhappy
+    - not good
+    - not very good
+    - extremly sad
+    - so saad
+    - so sad
+
+- intent: bot_challenge
+  examples: |
+    - are you a bot?
+    - are you a human?
+    - am I talking to a bot?
+    - am I talking to a human?
+
+- intent: fetch_weather
+  examples: |
+    - how is the weather in [London](location)?
+    - what is the weather like in [Paris](location) today?
+    - will it rain today in [Auckland](location)?
+    - is it cloudy today in [Rome](location)?
+    - what's the forecast for today in [Johannesburg](location)?
+    - can you give me a weather update for [Cape Town](location)?
+    - what is the weather prediction for tomorrow in [Sydney](location)?
+    - will it be hot this afternoon in [Wellington](location)?
+    - tell me if it's windy in [Barcelona](location) right now.
+    - are there any thunderstorms expected in [Mumbai](location) today?
+    - do I need an umbrella in [Tokyo](location)?
+    - how's the humidity in [Bangkok](location)?
+    - is [Los Angeles](location) experiencing a heatwave?
+    - will it snow in [Moscow](location) tomorrow?
+    - can you show the current temperature in [Dubai](location)?
+    - is there a chance of rain for [Hamburg](location) this weekend?
+    - I'd like to know if it's sunny in [Buenos Aires](location).
+    - do you have a weather report for [Paarl](location)?
+    - what about the climate in [Berlin](location) for the next week?
+    - is there fog expected in [San Francisco](location)?
+    - how does the evening look in [Toronto](location)?
+    - will [Rio de Janeiro](location) be hot today?
+    - can you check the weather for [Oslo](location) for me?
+    - I'm planning a trip to [Santiago](location), how's the weather there?
+    - tell me if [Beijing](location) is cold now.
+    - is it going to be a clear day in [Mexico City](location)?
+    - will it rain in [new york](location) today
+    - will it snow in [berlin](location)
+    - will it be cold in [mexico city](location)?
+    - do i need an umbrella today?
+    - What's the weather like?
+    - Can you tell me the current weather?
+    - How's the weather today?
+    - Is it raining?
+    - How hot is it in [Delhi](location) right now?
+    - Is it sunny or cloudy in [Vancouver](location)?
+    - What's the wind speed in [Amsterdam](location) today?
+    - Do we expect hail in [Chicago](location)?
+    - How's the sunrise in [Reykjavik](location)?
+    - Are there any weather warnings for [Lisbon](location)?
+    - What's the UV index in [Miami](location) today?
+    - Can I expect fog tomorrow morning in [Brussels](location)?
+    - Is it sweater weather in [Seattle](location) today?
+    - How many degrees is it in [Madrid](location) at the moment?
+    - What's the chance of precipitation in [Budapest](location)?
+    - Is [Nairobi](location) having a dry or wet season now?
+    - How's the sky in [Melbourne](location) – clear or overcast?
+    - Do we have a forecast for a meteor shower in [Athens](location)?
+    - What's the humidity level in [Singapore](location)?
+    - How long will the rain last in [Kuala Lumpur](location)?
+    - What's the visibility like in [Copenhagen](location)?
+    - Is it a good day for a picnic in [Zurich](location)?
+    - Will there be a rainbow in [Edinburgh](location)?
+    - Is the pollen count high in [Atlanta](location) today?
+

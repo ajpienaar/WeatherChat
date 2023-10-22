@@ -1,0 +1,62 @@
+version: "3.1"
+
+stories:
+
+- story: happy path
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_great
+  - action: utter_happy
+
+- story: sad path 1
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_unhappy
+  - action: utter_cheer_up
+  - action: utter_did_that_help
+  - intent: affirm
+  - action: utter_happy
+
+- story: sad path 2
+  steps:
+  - intent: greet
+  - action: utter_greet
+  - intent: mood_unhappy
+  - action: utter_cheer_up
+  - action: utter_did_that_help
+  - intent: deny
+  - action: utter_goodbye
+ 
+- story: user asks about the weather
+  steps:
+  - intent: fetch_weather
+    entities:
+    - location
+  - action: utter_fetch_weather
+
+- story: interactive_story_1
+  steps:
+  - intent: fetch_weather
+    entities:
+    - location: york
+  - slot_was_set:
+    - location: york
+  - intent: fetch_weather
+    entities:
+    - location: new york
+  - action: utter_fetch_weather
+  - intent: fetch_weather
+    entities:
+    - location: berlin
+  - slot_was_set:
+    - location: berlin
+  - action: utter_fetch_weather
+  - intent: fetch_weather
+    entities:
+    - location: mexico city
+  - slot_was_set:
+    - location: mexico city
+  - action: utter_fetch_weather
+  - intent: fetch_weather

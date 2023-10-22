@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<script src="weather.js"></script>
+<script src="coordinates.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbox</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background-color: #f0f0f0;
+    }
+    #chatbox {
+        border: 1px solid #ccc;
+        width: 300px;
+        height: 400px;
+        overflow-y: auto;
+        background-color: #fff;
+        padding: 10px;
+    }
+    #inputArea {
+        margin-top: 10px;
+        display: flex;
+        width: 300px;
+    }
+    #inputArea input {
+        flex-grow: 1;
+    }
+</style>
+</head>
+<body>
+
+<div id="chatbox"></div>
+
+<div id="inputArea">
+    <input type="text" id="questionInput" placeholder="Type your question here" onkeydown="handleEnterKey(event)">
+    <button onclick="submitQuestion()">Ask</button>
+</div>
+
+<script>
+    function handleEnterKey(event) {
+        if (event.key === "Enter") {
+            submitQuestion();
+        }
+    }
+
+    async function askRasa(question) {
+    
+    const apiUrl = "http://localhost:5005/model/parse";
+    const response = await fetch(apiUrl, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            text: question
+        }),
+    });
+    return await response.json();
+}
+
+    function submitQuestion() {
+    
+    const questionInput = document.getElementById('questionInput');
+    const chatbox = document.getElementById('chatbox');
+    const question = questionInput.value;
+    
+    questionInput.value = '';  // clear the input
+
+    chatbox.innerHTML += `<p>You: ${question}</p>`;
+    getAnswer(question).then(answerHtml => {
+        chatbox.innerHTML += answerHtml;
+        chatbox.scrollTop = chatbox.scrollHeight;  // scroll to the bottom
+    });
+}
+
+    async function getAnswer(question) {
+        
+    const rasaResponse = await askRasa(question);
+    console.log("Rasa Response:", rasaResponse);
+
+    const intent = rasaResponse.intent ? rasaResponse.intent.name : '';
+    console.log("Detected Intent:", intent);
+    const entities = rasaResponse.entities || [];
+    
+    let productEntity = entities.find(e => e.entity === 'product_name');
+    let locationEntity = entities.find(e => e.entity === 'location');
+    console.log("Detected Entity:", locationEntity ? locationEntity.value : "None");
+
+    switch (intent) {
+        case 'fetch_weather':
+            if (locationEntity) {
+                const { lat, long } = await getCoordinatesForLocation(locationEntity.value);
+                console.log("Coordinates:", { lat, long });
+
+                return await getWeather(lat, long);
+            } else {
+                return "Sorry, I couldn't find the weather for that location, please try a different one.";
+            }
+
+        case 'product_query':
+            if (productEntity) {
+                return await getProductDetails(productEntity.value);
+            } else {
+                return "Sorry, I couldn't identify the product.";
+            }
+
+        default:
+            // This fetches a more user-friendly response suitable for a chat interface.
+            const userFriendlyResponse = await fetch("http://localhost:5005/webhooks/rest/webhook", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    sender: "user",
+                    message: question
+                }),
+            });
+            return formatRasaResponse(await userFriendlyResponse.json());
+    }
+}
+
+    function formatRasaResponse(rasaResponses) {
+        let finalResponse = '';
+
+        rasaResponses.forEach(responseItem => {
+            if (responseItem.text) {
+                finalResponse += `<p>Chatbot: ${responseItem.text}</p>`;
+            }
+            if (responseItem.image) {
+                finalResponse += `<p>Chatbot: <img src="${responseItem.image}" alt="Image from Chatbot" style="max-width: 200px;"></p>`;
+            }
+            if (responseItem.buttons) {
+                responseItem.buttons.forEach(button => {
+                    finalResponse += `<div onclick="handleButtonClick('${button.payload}')" style="border:1px solid #ccc; padding:10px; margin:5px; display:inline-block; cursor:pointer;">${button.title}</div>`;
+                });
+            }
+        });
+
+        return finalResponse;
+    }
+
+    async function getProductDetails(productName) {
+        // Logic to fetch and return product details
+        return "<p>Chatbot: Product A costs $50.</p>";
+    }
+
+    function handleButtonClick(payload) {
+        
+        getAnswer(payload).then(answerHtml => {
+            const chatbox = document.getElementById('chatbox');
+            chatbox.innerHTML += answerHtml;
+            chatbox.scrollTop = chatbox.scrollHeight;
+        });
+    }
+
+    
+    function isValidHttpUrl(string) {
+        let url;
+        try {
+            url = new URL(string);
+        } catch (_) {
+            return false;  
+        }
+        return url.protocol === "http:" || url.protocol === "https:";
+    }
+
+    function isImageUrl(url) {
+        const imgExtensions = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.svg', '.tiff', '.webp'];
+        const extension = url.split('.').pop();
+        return imgExtensions.includes(`.${extension}`);
+    }
+</script>
+
+</body>
+</html>
